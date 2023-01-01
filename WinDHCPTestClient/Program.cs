@@ -30,6 +30,7 @@ namespace WinDHCPTestClient
 
                 Byte[] physicalAddr = NetworkInterface.GetAllNetworkInterfaces()[0].GetPhysicalAddress().GetAddressBytes();
                 discoverMessage.ClientHardwareAddress = physicalAddr;
+                Console.WriteLine("Mac=" + BitConverter.ToString(physicalAddr));
 
                 discoverMessage.AddOption(DhcpOption.DhcpMessageType, (Byte)DhcpMessageType.Discover);
 
@@ -49,7 +50,9 @@ namespace WinDHCPTestClient
                 Byte[] messageData = new Byte[len];
                 Array.Copy(buffer, messageData, Math.Min(len, buffer.Length));
                 DhcpMessage responseMessage = new DhcpMessage(messageData);
-
+                IPAddress ipv4Addr = IPAddress.Parse("127.0.0.1");
+                ipv4Addr = new IPAddress(responseMessage.AssignedAddress);
+                Console.WriteLine("ip address=" + ipv4Addr.ToString());
                 Console.ReadLine();
             }
         }
